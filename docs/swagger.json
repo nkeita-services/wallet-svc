@@ -1,0 +1,38 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Handle infra operations",
+    "title": "Infra Console API",
+    "version": "1.0"
+  },
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Kubernetes",
+      "description": "Kubernetes cluster operations"
+    }
+  ],
+  "paths": {
+    "/api/kubernetes/{cluster}/services/versions": {
+      "get": {
+        "tags": [
+          "Kubernetes"
+        ],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "path",
+            "description": "cluster name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    }
+  }
+}
