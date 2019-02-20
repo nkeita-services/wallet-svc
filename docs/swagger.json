@@ -1,35 +1,456 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "description": "Handle infra operations",
-    "title": "Infra Console API",
-    "version": "1.0"
-  },
-  "basePath": "/",
-  "tags": [
+  "openapi": "3.0.0",
+  "servers": [
     {
-      "name": "Kubernetes",
-      "description": "Kubernetes cluster operations"
+      "description": "SwaggerHub API Auto Mocking",
+      "url": "https://virtserver.swaggerhub.com/nkeita-services/Wallet/1.0.0"
+    }
+  ],
+  "info": {
+    "version": "1.0.0",
+    "title": "Wallet service",
+    "description": "This is the wallet service API documentation"
+  },
+  "security": [
+    {
+      "application": [
+        "read",
+        "write"
+      ]
     }
   ],
   "paths": {
-    "/api/kubernetes/{cluster}/services/versions": {
+    "/accounts": {
       "get": {
         "tags": [
-          "Kubernetes"
+          "account"
         ],
+        "summary": "Display a collection of accounts",
+        "description": "Display a collection of accounts",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Account"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "account"
+        ],
+        "summary": "Create an account",
+        "description": "Create an account",
+        "operationId": "createAccount",
+        "responses": {
+          "201": {
+            "description": "Account created"
+          },
+          "422": {
+            "description": "Invalid request"
+          }
+        },
+        "requestBody": {
+          "description": "Account to add to the system",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Account"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{accountId}": {
+      "get": {
+        "tags": [
+          "account"
+        ],
+        "summary": "Get an account by accountId",
+        "description": "Get an account by accountId",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Account not found"
+          }
+        },
         "parameters": [
           {
-            "name": "cluster",
+            "name": "accountId",
             "in": "path",
-            "description": "cluster name",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/accounts/{accountId}/balance/{amount}": {
+      "patch": {
+        "tags": [
+          "account"
+        ],
+        "responses": {
+          "204": {
+            "description": "Account updated"
+          }
+        },
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ]
+      }
+    },
+    "/accounts/{accountId}/transactions": {
+      "post": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Add a transaction to an account",
+        "description": "Add a transaction to an account",
+        "operationId": "createAccountTransaction",
+        "responses": {
+          "201": {
+            "description": "account transaction created"
+          }
+        },
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Transaction to add to the system",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Transaction"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "list an account transactions",
+        "description": "list an account transactions",
+        "operationId": "listAccountTransaction",
+        "responses": {
+          "200": {
+            "description": "account transactions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Transaction"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/wallets/{accountId}/transactions/{transactionId}": {
+      "get": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Get a transaction",
+        "description": "Get a transaction",
+        "operationId": "getAccountTransaction",
+        "responses": {
+          "200": {
+            "description": "account transaction",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Transaction"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get a collection of users",
+        "description": "Get a collection of users",
+        "operationId": "getUsers",
+        "responses": {
+          "200": {
+            "description": "collection of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Create a user",
+        "description": "Create a user",
+        "operationId": "createUser",
+        "responses": {
+          "201": {
+            "description": "user created"
+          }
+        },
+        "requestBody": {
+          "description": "user to add to the system",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get a user",
+        "description": "Get a user",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/{userId}/accounts": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get a user accounts",
+        "description": "Get user accounts",
+        "operationId": "getUserAccounts",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation"
+            "description": "user accounts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/accounts/{accountId}": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Link a new wallet to a user",
+        "description": "Link a new account to a user",
+        "operationId": "linkAccountToUser",
+        "responses": {
+          "201": {
+            "description": "link created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAccountLink"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Account": {
+        "type": "object",
+        "properties": {
+          "balance": {
+            "type": "number"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/Currency"
+          }
+        }
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "UserAccountLink": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "accountId": {
+            "type": "string"
+          }
+        }
+      },
+      "Currency": {
+        "type": "string",
+        "enum": [
+          "EUR",
+          "GBP",
+          "USD"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "application": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http://example.com/oauth/token",
+            "scopes": {
+              "write": "allows modifying resources",
+              "read": "allows reading resources"
+            }
           }
         }
       }
